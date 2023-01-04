@@ -1,0 +1,59 @@
+﻿@model IEnumerable<BugTrack.Models.IssueReportEntity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IssueTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThreatLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GeneralDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReplicationDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateFound)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <th>
+                @Html.DisplayFor(modelItem => item.IssueTitle)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.ThreatLevel)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.GeneralDescription)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.ReplicationDescription)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.DateFound)
+            </th>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
