@@ -22,9 +22,19 @@ namespace BugTrack.Controllers
         }
 
         // GET: IssueReports
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-              return View(await _context.IssueReport.ToListAsync());
+            var issues = from i in _context.IssueReport
+                         select i;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                issues = from i in _context.IssueReport
+                         where i.IssueTitle.Contains(searchString)
+                         select i;
+            }
+
+            return View(await issues.ToListAsync());
         }
 
         // GET: IssueReports/Details/5
