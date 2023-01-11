@@ -10,11 +10,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BugTrackerCnn")));
-builder.Services.AddDbContext<UserContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("UserContextCnn")));
 
 builder.Services.AddDefaultIdentity<BugUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<UserContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 var app = builder.Build();
 

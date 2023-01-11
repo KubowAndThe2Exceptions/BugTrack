@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using BugTrack.Data;
 using BugTrack.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using BugTrack.Areas.Identity.Data;
+using BugTrack.ViewModels;
 
 namespace BugTrack.Controllers
 {
@@ -15,10 +18,13 @@ namespace BugTrack.Controllers
     public class IssueReportsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BugUser> _userManager;
 
-        public IssueReportsController(ApplicationDbContext context)
+        public IssueReportsController(ApplicationDbContext context, UserManager<BugUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: IssueReports
@@ -66,15 +72,24 @@ namespace BugTrack.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ThreatLevel,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntity issueReportEntity)
+        public async Task<IActionResult> Create([Bind("ThreatLevel,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntityViewModel issueReportEntityViewModel)
         {
             if (ModelState.IsValid)
             {
+                var bugUser = await _userManager.GetUserAsync(User);
+                var issueReportEntity = new IssueReportEntity();
+                issueReportEntity.IssueTitle = issueReportEntityViewModel.IssueTitle;
+                issueReportEntity.ThreatLevel = issueReportEntityViewModel.ThreatLevel;
+                issueReportEntity.GeneralDescription = issueReportEntityViewModel.GeneralDescription;
+                issueReportEntity.ReplicationDescription = issueReportEntityViewModel.ReplicationDescription;
+                issueReportEntity.DateFound = issueReportEntityViewModel.DateFound;
+                issueReportEntity.BugUser = bugUser;
+
                 _context.Add(issueReportEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(issueReportEntity);
+            return View(issueReportEntityViewModel);
         }
 
         // GET: IssueReports/Edit/5

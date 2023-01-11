@@ -11,19 +11,19 @@ namespace BugTrack.Controllers
     public class ProfileController : Controller
     {
         private readonly UserManager<BugUser> _userManager;
-        private readonly UserContext _userContext;
+        private readonly ApplicationDbContext _context;
 
-        public ProfileController(UserManager<BugUser> userManager, UserContext userContext)
+        public ProfileController(UserManager<BugUser> userManager, ApplicationDbContext userContext)
         {
             _userManager = userManager;
-            _userContext = userContext;
+            _context = userContext;
         }
 
 
         // GET: ProfileController
         public async Task<IActionResult> Index()
         {
-            var allUsers = from u in _userContext.Users
+            var allUsers = from u in _context.Users
                            select u;
 
             return View(await allUsers.ToListAsync());
@@ -32,7 +32,7 @@ namespace BugTrack.Controllers
         // GET: ProfileController/Details/5
         public async Task<IActionResult> Details(string? id)
         {
-            if (id == null || _userContext.Users == null)
+            if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
