@@ -17,9 +17,24 @@ namespace BugTrack.Data
                 .HasOne(p => p.BugUser)
                 .WithMany(p => p.IssueReportEntities)
                 .HasForeignKey(p => p.BugUserId);
+            builder.Entity<Comment>()
+                .HasOne(p => p.IssueReportEntity)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(p => p.IssueReportEntityId);
+            builder.Entity<Comment>()
+                .HasOne(p => p.BugUser)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(p => p.BugUserId);
+            builder.Entity<BugUser>()
+                .HasOne(p => p.Profile)
+                .WithOne(p => p.BugUser)
+                .HasForeignKey<Profile>(p => p.BugUserId);
+                
         }
 
         public DbSet<IssueReportEntity> IssueReport { get; set; }
         public DbSet<BugUser> BugUser { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
     }
 }

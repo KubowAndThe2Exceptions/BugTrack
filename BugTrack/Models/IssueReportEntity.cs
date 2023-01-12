@@ -18,6 +18,8 @@ namespace BugTrack.Models
         public BugUser BugUser { get; set; }
         public string BugUserId { get; set; }
 
+        public ICollection<Comment> Comments { get; set; }
+
         public IssueReportEntity() { }
 
         public IssueReportEntityWithIdViewModel ConvertToIssueReportEntityWithIdVM()
