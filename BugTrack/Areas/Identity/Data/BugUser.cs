@@ -14,6 +14,8 @@ public class BugUser : IdentityUser
     public string? FirstName { get; set; }
     [PersonalData]
     public string? LastName { get; set; }
-    public List<IssueReportEntity> IssueReportEntities { get; set; }
+    public ICollection<IssueReportEntity> IssueReportEntities { get; set; }
+
+    public BugUser() { }
 }
 

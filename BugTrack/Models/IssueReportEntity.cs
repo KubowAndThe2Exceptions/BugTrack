@@ -1,6 +1,7 @@
 ﻿using BugTrack.Areas.Identity.Data;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations.Schema;
+using BugTrack.ViewModels.VMIssueReportEntities;
 
 namespace BugTrack.Models
 {
@@ -16,6 +17,21 @@ namespace BugTrack.Models
 
         public BugUser BugUser { get; set; }
         public string BugUserId { get; set; }
+
+        public IssueReportEntity() { }
+
+        public IssueReportEntityWithIdViewModel ConvertToIssueReportEntityWithIdVM()
+        {
+            IssueReportEntityWithIdViewModel issueReportEntityWithIdVM = new IssueReportEntityWithIdViewModel();
+            issueReportEntityWithIdVM.IssueTitle = this.IssueTitle;
+            issueReportEntityWithIdVM.ThreatLevel = this.ThreatLevel;
+            issueReportEntityWithIdVM.GeneralDescription = this.GeneralDescription;
+            issueReportEntityWithIdVM.ReplicationDescription = this.ReplicationDescription;
+            issueReportEntityWithIdVM.DateFound = this.DateFound;
+            issueReportEntityWithIdVM.Id = this.Id;
+
+            return issueReportEntityWithIdVM;
+        }
 
     }
 }

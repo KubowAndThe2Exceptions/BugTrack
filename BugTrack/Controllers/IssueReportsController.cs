@@ -10,7 +10,7 @@ using BugTrack.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BugTrack.Areas.Identity.Data;
-using BugTrack.ViewModels;
+using BugTrack.ViewModels.VMIssueReportEntities;
 
 namespace BugTrack.Controllers
 {
@@ -24,7 +24,6 @@ namespace BugTrack.Controllers
         {
             _context = context;
             _userManager = userManager;
-
         }
 
         // GET: IssueReports
@@ -77,13 +76,7 @@ namespace BugTrack.Controllers
             if (ModelState.IsValid)
             {
                 var bugUser = await _userManager.GetUserAsync(User);
-                var issueReportEntity = new IssueReportEntity();
-                issueReportEntity.IssueTitle = issueReportEntityViewModel.IssueTitle;
-                issueReportEntity.ThreatLevel = issueReportEntityViewModel.ThreatLevel;
-                issueReportEntity.GeneralDescription = issueReportEntityViewModel.GeneralDescription;
-                issueReportEntity.ReplicationDescription = issueReportEntityViewModel.ReplicationDescription;
-                issueReportEntity.DateFound = issueReportEntityViewModel.DateFound;
-                issueReportEntity.BugUser = bugUser;
+                var issueReportEntity = issueReportEntityViewModel.ConvertToIssueReportEntity(bugUser);
 
                 _context.Add(issueReportEntity);
                 await _context.SaveChangesAsync();
@@ -101,11 +94,16 @@ namespace BugTrack.Controllers
             }
 
             var issueReportEntity = await _context.IssueReport.FindAsync(id);
+            
+
             if (issueReportEntity == null)
             {
                 return NotFound();
             }
-            return View(issueReportEntity);
+            var issueReportEntityVM = issueReportEntity.ConvertToIssueReportEntityWithIdVM();
+
+
+            return View(issueReportEntityVM);
         }
 
         // POST: IssueReports/Edit/5
@@ -113,9 +111,15 @@ namespace BugTrack.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ThreatLevel,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntity issueReportEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ThreatLevel,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntityWithIdViewModel issueReportEntityVM)
         {
-            if (id != issueReportEntity.Id)
+            if (id != issueReportEntityVM.Id)
+            {
+                return NotFound();
+            }
+
+            var issueReportEntity = await _context.IssueReport.FindAsync(issueReportEntityVM.Id);
+            if (issueReportEntity == null)
             {
                 return NotFound();
             }
@@ -124,6 +128,10 @@ namespace BugTrack.Controllers
             {
                 try
                 {
+                    _context.Entry(issueReportEntity).Reference(i => i.BugUser).Load();
+                    _context.Entry(issueReportEntity).State = EntityState.Detached;
+
+                    issueReportEntity = issueReportEntityVM.ConvertToIssueReportEntity(issueReportEntity.BugUser);
                     _context.Update(issueReportEntity);
                     await _context.SaveChangesAsync();
                 }
@@ -140,7 +148,7 @@ namespace BugTrack.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(issueReportEntity);
+            return View(issueReportEntityVM);
         }
 
         // GET: IssueReports/Delete/5

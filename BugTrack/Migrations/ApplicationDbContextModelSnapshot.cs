@@ -57,7 +57,7 @@ namespace BugTrack.Migrations
 
                     b.HasIndex("BugUserId");
 
-                    b.ToTable("IssueReport");
+                    b.ToTable("IssueReport", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
