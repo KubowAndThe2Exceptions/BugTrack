@@ -16,5 +16,12 @@ namespace BugTrack.Models
         public string? BugUserId { get; set; }
 
         public Profile() { }
+
+        public Profile(string firstName, string lastName, string email)
+        {
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+        }
     }
 }

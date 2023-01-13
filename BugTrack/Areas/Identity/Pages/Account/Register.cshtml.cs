@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using BugTrack.Models;
 
 namespace BugTrack.Areas.Identity.Pages.Account
 {
@@ -124,6 +125,8 @@ namespace BugTrack.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
+                var userProfile = new Profile(Input.FirstName, Input.LastName, Input.Email);
+                user.Profile = userProfile;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
