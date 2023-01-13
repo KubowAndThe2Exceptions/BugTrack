@@ -16,7 +16,8 @@ namespace BugTrack.Data
             builder.Entity<IssueReportEntity>()
                 .HasOne(p => p.BugUser)
                 .WithMany(p => p.IssueReportEntities)
-                .HasForeignKey(p => p.BugUserId);
+                .HasForeignKey(p => p.BugUserId)
+                .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Comment>()
                 .HasOne(p => p.IssueReportEntity)
                 .WithMany(p => p.Comments)
@@ -24,7 +25,8 @@ namespace BugTrack.Data
             builder.Entity<Comment>()
                 .HasOne(p => p.BugUser)
                 .WithMany(p => p.Comments)
-                .HasForeignKey(p => p.BugUserId);
+                .HasForeignKey(p => p.BugUserId)
+                .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<BugUser>()
                 .HasOne(p => p.Profile)
                 .WithOne(p => p.BugUser)

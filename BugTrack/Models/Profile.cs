@@ -12,8 +12,8 @@ namespace BugTrack.Models
         [EmailAddress]
         public string Email { get; set; }
         
-        public BugUser BugUser { get; set; }
-        public string BugUserId { get; set; }
+        public BugUser? BugUser { get; set; }
+        public string? BugUserId { get; set; }
 
         public Profile() { }
     }

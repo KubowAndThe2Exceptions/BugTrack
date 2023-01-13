@@ -15,8 +15,8 @@ namespace BugTrack.Models
         public string ReplicationDescription { get; set; }
         public DateTime DateFound { get; set; }
 
-        public BugUser BugUser { get; set; }
-        public string BugUserId { get; set; }
+        public BugUser? BugUser { get; set; }
+        public string? BugUserId { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
 
