@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations.Schema;
 using BugTrack.ViewModels.VMIssueReportEntities;
+using BugTrack.ViewModels.VMComments;
 
 namespace BugTrack.Models
 {
@@ -31,6 +32,20 @@ namespace BugTrack.Models
             issueReportEntityWithIdVM.ReplicationDescription = this.ReplicationDescription;
             issueReportEntityWithIdVM.DateFound = this.DateFound;
             issueReportEntityWithIdVM.Id = this.Id;
+
+            if (Comments != null)
+            {
+                foreach (var comment in Comments)
+                {
+                    //var commentViewModel = new CommentViewModel();
+                    //commentViewModel.TimePosted = comment.TimePosted;
+                    //commentViewModel.CommentId = comment.Id;
+                    //commentViewModel.OwnerName = comment.OwnerName;
+                    //commentViewModel.BugUserId = comment.BugUserId;
+                    //commentViewModel.Content = comment.Content;
+                    issueReportEntityWithIdVM.Comments.Add(CommentViewModel.CommentToVM(comment));
+                }
+            }
 
             return issueReportEntityWithIdVM;
         }

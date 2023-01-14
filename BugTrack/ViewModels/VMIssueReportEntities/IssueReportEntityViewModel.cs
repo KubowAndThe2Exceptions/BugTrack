@@ -1,5 +1,6 @@
 ﻿using BugTrack.Areas.Identity.Data;
 using BugTrack.Models;
+using BugTrack.ViewModels.VMComments;
 
 namespace BugTrack.ViewModels.VMIssueReportEntities
 {
@@ -10,6 +11,12 @@ namespace BugTrack.ViewModels.VMIssueReportEntities
         public string GeneralDescription { get; set; }
         public string ReplicationDescription { get; set; }
         public DateTime DateFound { get; set; }
+        public List<CommentViewModel> Comments { get; set; }
+
+        public IssueReportEntityViewModel()
+        {
+            Comments = new List<CommentViewModel>();
+        }
 
 
 

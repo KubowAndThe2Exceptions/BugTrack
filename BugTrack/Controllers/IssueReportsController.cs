@@ -52,12 +52,41 @@ namespace BugTrack.Controllers
 
             var issueReportEntity = await _context.IssueReport
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (issueReportEntity == null)
             {
                 return NotFound();
             }
+            await _context.Entry(issueReportEntity).Collection(p => p.Comments).LoadAsync();
 
-            return View(issueReportEntity);
+            var issueReportVM = issueReportEntity.ConvertToIssueReportEntityWithIdVM();
+
+            return View(issueReportVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Details(int? id, string commentBody)
+        {
+            if (id == null || _context.IssueReport == null)
+            {
+                return NotFound();
+            }
+            var issueReportEntity = await _context.IssueReport
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (issueReportEntity == null)
+            {
+                return NotFound();
+            }
+            await _context.Entry(issueReportEntity).Collection(p => p.Comments).LoadAsync();
+            Comment newComment = new Comment(commentBody, DateTime.Now);
+            newComment.BugUser = await _userManager.GetUserAsync(User);
+            newComment.OwnerName = newComment.BugUser.FirstName + " " + newComment.BugUser.LastName;
+            issueReportEntity.Comments.Add(newComment);
+            await _context.SaveChangesAsync();
+
+            var issueReportVM = issueReportEntity.ConvertToIssueReportEntityWithIdVM();
+
+            return View(issueReportVM);
         }
 
         // GET: IssueReports/Create

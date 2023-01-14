@@ -9,6 +9,7 @@ namespace BugTrack.Models
         [Required]
         public string Content { get; set; }
         public DateTime TimePosted { get; set; }
+        public string OwnerName { get; set; }
 
         public BugUser? BugUser { get; set; }
         public string? BugUserId { get; set; }
@@ -17,5 +18,10 @@ namespace BugTrack.Models
         public IssueReportEntity IssueReportEntity { get; set; }
 
         public Comment() { }
+        public Comment(string content, DateTime timePosted)
+        {
+            Content = content;
+            TimePosted = timePosted;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model BugTrack.Models.IssueReportEntity
+﻿@using BugTrack.ViewModels;
+@model BugTrack.ViewModels.VMIssueReportEntities.IssueReportEntityWithIdViewModel;
 
 @{
     ViewData["Title"] = "Details";
@@ -42,6 +43,26 @@
         </dd>
     </dl>
 </div>
+<form asp-action="Details">
+            <div class="form-group">
+                <input type="hidden" asp-for="Id" />
+                <label class="control-label" for="commentBody">Comment</label>
+                <input class="form-control" type="text" id="commentBody" name="commentBody" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+@foreach (var item in Model.Comments) {
+    <div>
+            @Html.DisplayFor(modelItem => item.OwnerName)
+            <br />
+            @Html.DisplayFor(modelItem => item.TimePosted)
+            <br />
+            @Html.DisplayFor(modelItem => item.Content)
+    </div>
+        <br />
+}
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
