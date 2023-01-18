@@ -29,6 +29,7 @@ namespace BugTrack.Controllers
         // GET: IssueReports
         public async Task<IActionResult> Index(string searchString)
         {
+            //Should contain issue report view models instead of issuereport itself
             var issues = from i in _context.IssueReport
                          select i;
 
@@ -183,6 +184,7 @@ namespace BugTrack.Controllers
         // GET: IssueReports/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //Needs Refactor
             if (id == null || _context.IssueReport == null)
             {
                 return NotFound();
