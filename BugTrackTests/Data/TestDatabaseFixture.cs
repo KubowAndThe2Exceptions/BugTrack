@@ -33,11 +33,18 @@ namespace BugTrackTests.Data
                         
                         context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Comments OFF");
                         context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.IssueReport OFF");
+                        context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Profiles OFF");
 
                         context.Add(
                             new BugUser { FirstName = "John", LastName = "Doe", Email = "something@gmail.com", Id = "TESTID-T1" });
                         context.Add(new BugUser { FirstName = "Rebecca", LastName = "Cornwheel", Email = "somethingelse@gmail.com", Id = "TESTID-T2" });
                         context.Add(new BugUser { FirstName = "Bob", LastName = "Lehman", Email = "Bobby@gmail.com", Id = "TESTID-T3" });
+
+                        context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Profiles ON");
+                        context.Add(new Profile { OwnerName = "John Doe", BugUserId = "TESTID-T1", Email = "something@gmail.com",
+                            UserJobTitle = "Job Title", Id = 1 });
+                        context.SaveChanges();
+                        context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Profiles OFF");
 
                         context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.IssueReport ON");
                         context.Add(

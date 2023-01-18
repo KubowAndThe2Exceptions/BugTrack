@@ -20,10 +20,11 @@ namespace BugTrack.Models
 
         public Profile() { }
 
-        public Profile(string firstName, string lastName, string email)
+        public Profile(string firstName, string lastName, string email, string jobTitle)
         {
             Email = email;
             OwnerName = firstName + " " + lastName;
+            UserJobTitle = jobTitle;
         }
 
         public ProfileViewModel ConvertToProfileVM()
@@ -34,10 +35,13 @@ namespace BugTrack.Models
             profileVM.Email = Email;
             profileVM.UserJobTitle = UserJobTitle;
 
-            foreach (var issue in this.BugUser.IssueReportEntities)
+            if (this.BugUser != null)
             {
-                var convertedIssue = issue.ConvertToIssueReportEntityWithIdVM();
-                profileVM.IssueReportVMs.Add(convertedIssue);
+                foreach (var issue in this.BugUser.IssueReportEntities)
+                {
+                    var convertedIssue = issue.ConvertToIssueReportEntityWithIdVM();
+                    profileVM.IssueReportVMs.Add(convertedIssue);
+                }
             }
             return profileVM;
         }

@@ -14,6 +14,8 @@ public class BugUser : IdentityUser
     public string? FirstName { get; set; }
     [PersonalData]
     public string? LastName { get; set; }
+    [PersonalData]
+    public string? JobTitle { get; set; }
     
     public ICollection<IssueReportEntity> IssueReportEntities { get; set; }
     //Likely will not be used quite yet.  Still thinking about how I want to implement comments in the future

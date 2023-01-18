@@ -28,7 +28,13 @@ namespace BugTrack.Controllers
         // GET: Profiles
         public async Task<IActionResult> Index(string searchString)
         {
-            var profiles = _context.Profiles.Include(p => p.BugUser).ThenInclude(p => p.IssueReportEntities);
+            var profiles = _context.Profiles.Include(profile => profile.BugUser).ToList();
+
+            if (!String.IsNullOrWhiteSpace(searchString))
+            {
+                profiles = profiles.Where(i => i.OwnerName.Contains(searchString)).ToList();
+            }
+            
             var profileVMs = new List<ProfileViewModel>();
             foreach (var profile in profiles)
             {
@@ -48,14 +54,17 @@ namespace BugTrack.Controllers
             }
 
             var profile = await _context.Profiles
-                .Include(p => p.BugUser)
+                .Include(p => p.BugUser).ThenInclude(p => p.IssueReportEntities)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (profile == null)
             {
                 return NotFound();
             }
 
-            return View(profile);
+            var convertedProfile = profile.ConvertToProfileVM();
+
+            return View(convertedProfile);
         }
 
         // GET: Profiles/Create
