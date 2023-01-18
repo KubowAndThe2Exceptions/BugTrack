@@ -1,17 +1,13 @@
-﻿using Xunit;
-using BugTrack.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BugTrackTests.Data;
-using Microsoft.AspNetCore.Identity;
-using BugTrack.Areas.Identity.Data;
-using Moq;
+﻿using BugTrack.Areas.Identity.Data;
 using BugTrack.Models;
-using Microsoft.AspNetCore.Mvc;
 using BugTrack.ViewModels.VMIssueReportEntities;
+using BugTrackTests.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using System.Security.Claims;
+using Xunit;
 
 namespace BugTrack.Controllers.Tests
 {
@@ -137,8 +133,53 @@ namespace BugTrack.Controllers.Tests
         [Fact()]
         public async Task DetailsPost_AddsComments_AndHasCommentsInModel()
         {
+            //Currently fails, needs specific mocking procedure of GetUserAsync,
+            //which requires claims principal set up.
+
             //Will need a transaction and then a context.changetracker.clear()
-            Assert.True(false, "Test Unwritten");
+            //Arrange
+            using var context = Fixture.CreateContext();
+            await context.Database.BeginTransactionAsync();
+            var bugUser = new BugUser();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+            }));
+
+            var store = new Mock<IUserStore<BugUser>>();
+            var uManager = new Mock<UserManager<BugUser>>(store.Object, null, null, null, null, null, null, null, null);
+            uManager.Setup(m => m.GetUserAsync(user)).ReturnsAsync(bugUser);
+
+            var controllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = user
+                }
+            };
+
+            var controller = new IssueReportsController(context, uManager.Object);
+            controller.ControllerContext = controllerContext;
+
+            var targetIssueReport = context.IssueReport.Where(i => i.Id == 2).FirstOrDefault();
+            context.Entry(targetIssueReport).Collection(n => n.Comments).Load();
+            int priorCount = targetIssueReport.Comments.Count();
+
+            //Act
+            var result = await controller.Details(2, "something of value");
+
+            //Assert
+            context.ChangeTracker.Clear();
+
+            int postCount = targetIssueReport.Comments.Count();
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<IssueReportEntityWithIdViewModel>(viewResult.ViewData.Model);
+
+            Assert.NotEqual(postCount, priorCount);
+            Assert.NotEmpty(model.Comments);
+
+
         }
 
         [Fact()]
@@ -168,8 +209,43 @@ namespace BugTrack.Controllers.Tests
         [Fact()]
         public async Task CreatePost_ReturnsRedirectToAction_IfModelStateValid_AndCreates()
         {
-            //Will need a transaction and then a context.changetracker.clear()
-            Assert.True(false, "Test Unwritten");
+            //Arrange
+            using var context = Fixture.CreateContext();
+            await context.Database.BeginTransactionAsync();
+            var bugUser = new BugUser();
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+            }));
+
+            var store = new Mock<IUserStore<BugUser>>();
+            var uManager = new Mock<UserManager<BugUser>>(store.Object, null, null, null, null, null, null, null, null);
+            uManager.Setup(m => m.GetUserAsync(user)).ReturnsAsync(bugUser);
+
+            var controllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = user
+                }
+            };
+
+            var controller = new IssueReportsController(context, uManager.Object);
+            controller.ControllerContext = controllerContext;
+
+            var issueReportVM = new IssueReportEntityViewModel { DateFound = DateTime.Now, GeneralDescription = "foo",
+                IssueTitle = "bar", ReplicationDescription = "foobar", ThreatLevel = 2};
+
+            int priorCount = context.IssueReport.Count();
+
+            //Act
+            var result = await controller.Create(issueReportVM);
+
+            //Assert
+            int postCount = context.IssueReport.Count();
+
+            var viewResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.NotEqual(priorCount, postCount);
         }
 
         [Fact()]
@@ -262,7 +338,22 @@ namespace BugTrack.Controllers.Tests
         [Fact()]
         public async Task EditPost_UpdatesDatabase_AndReturnsRedirectToActionResult()
         {
-            Assert.True(false, "Test Unwritten");
+            var store = new Mock<IUserStore<BugUser>>();
+            var uManager = new Mock<UserManager<BugUser>>(store.Object, null, null, null, null, null, null, null, null);
+            var context = Fixture.CreateContext();
+            var controller = new IssueReportsController(context, uManager.Object);
+            context.Database.BeginTransaction();
+
+            var issueReportVM = new IssueReportEntityWithIdViewModel { Id = 1, DateFound = DateTime.Now, GeneralDescription = "Foo",
+                ReplicationDescription = "bar", IssueTitle = "An issue", ThreatLevel = 1 };
+
+            //Act
+            var result = await controller.Edit(1, issueReportVM);
+            context.ChangeTracker.Clear();
+            //Assert
+            var updatedIssue = context.IssueReport.Where(m => m.Id == 1).FirstOrDefault();
+            var viewResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(issueReportVM.IssueTitle, updatedIssue.IssueTitle);
         }
         [Fact()]
         public async Task Delete_ReturnsNotFound_IfIdNull()
@@ -300,7 +391,21 @@ namespace BugTrack.Controllers.Tests
         [Fact()]
         public async Task DeleteConfirmed_RemovesIssueReportEntity()
         {
-            Assert.True(false, "Test Unwritten");
+            var store = new Mock<IUserStore<BugUser>>();
+            var uManager = new Mock<UserManager<BugUser>>(store.Object, null, null, null, null, null, null, null, null);
+
+            using var context = Fixture.CreateContext();
+            var controller = new IssueReportsController(context, uManager.Object);
+            context.Database.BeginTransaction();
+
+            //Act
+            var result = await controller.DeleteConfirmed(1);
+            context.ChangeTracker.Clear();
+            //Assert
+
+            var issueReport = context.IssueReport.Where(m => m.Id == 1).FirstOrDefault();
+            var returnedResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Null(issueReport);
         }
     }
 }
