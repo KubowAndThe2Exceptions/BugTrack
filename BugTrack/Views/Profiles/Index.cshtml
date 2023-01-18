@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BugTrack.Models.Profile>
+﻿@model IEnumerable<BugTrack.ViewModels.VMProfiles.ProfileViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,16 +14,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.OwnerName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BugUser)
+                @Html.DisplayNameFor(model => model.UserJobTitle)
             </th>
             <th></th>
         </tr>
@@ -32,16 +29,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.OwnerName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BugUser.Id)
+                @Html.DisplayFor(modelItem => item.UserJobTitle)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

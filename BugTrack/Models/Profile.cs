@@ -1,4 +1,5 @@
 ﻿using BugTrack.Areas.Identity.Data;
+using BugTrack.ViewModels.VMProfiles;
 using System.ComponentModel.DataAnnotations;
 
 namespace BugTrack.Models
@@ -6,11 +7,13 @@ namespace BugTrack.Models
     public class Profile
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        
+        public string OwnerName { get; set; }
 
         [EmailAddress]
         public string Email { get; set; }
+
+        public string UserJobTitle { get; set; }
         
         public BugUser? BugUser { get; set; }
         public string? BugUserId { get; set; }
@@ -20,8 +23,23 @@ namespace BugTrack.Models
         public Profile(string firstName, string lastName, string email)
         {
             Email = email;
-            FirstName = firstName;
-            LastName = lastName;
+            OwnerName = firstName + " " + lastName;
+        }
+
+        public ProfileViewModel ConvertToProfileVM()
+        {
+            var profileVM = new ProfileViewModel();
+            profileVM.Id = Id;
+            profileVM.OwnerName = OwnerName;
+            profileVM.Email = Email;
+            profileVM.UserJobTitle = UserJobTitle;
+
+            foreach (var issue in this.BugUser.IssueReportEntities)
+            {
+                var convertedIssue = issue.ConvertToIssueReportEntityWithIdVM();
+                profileVM.IssueReportVMs.Add(convertedIssue);
+            }
+            return profileVM;
         }
     }
 }

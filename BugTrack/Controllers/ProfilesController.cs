@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTrack.Data;
 using BugTrack.Models;
+using Microsoft.AspNetCore.Identity;
+using BugTrack.Areas.Identity.Data;
+using BugTrack.ViewModels.VMProfiles;
 
 namespace BugTrack.Controllers
 {
@@ -14,16 +17,26 @@ namespace BugTrack.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public ProfilesController(ApplicationDbContext context)
+        private readonly UserManager<BugUser> _userManager;
+
+        public ProfilesController(ApplicationDbContext context, UserManager<BugUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Profiles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var applicationDbContext = _context.Profiles.Include(p => p.BugUser);
-            return View(await applicationDbContext.ToListAsync());
+            var profiles = _context.Profiles.Include(p => p.BugUser).ThenInclude(p => p.IssueReportEntities);
+            var profileVMs = new List<ProfileViewModel>();
+            foreach (var profile in profiles)
+            {
+                var convertedProfile = profile.ConvertToProfileVM();
+                profileVMs.Add(convertedProfile);
+            }
+
+            return View( profileVMs);
         }
 
         // GET: Profiles/Details/5
