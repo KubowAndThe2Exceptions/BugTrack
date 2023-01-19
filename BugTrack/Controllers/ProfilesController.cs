@@ -68,7 +68,7 @@ namespace BugTrack.Controllers
         }
 
         // GET: Profiles/Details/5
-        public async Task<IActionResult> Details(string? id)
+        public async Task<IActionResult> MyProfile(string? id)
         {
             if (id == null || _context.Profiles == null)
             {

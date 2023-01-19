@@ -94,7 +94,6 @@ namespace BugTrack.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
             [Display(Name = "Job Title")]
             public string JobTitle { get; set; }
 
