@@ -35,7 +35,7 @@ namespace BugTrack.Models
             profileVM.Email = Email;
             profileVM.UserJobTitle = UserJobTitle;
 
-            if (this.BugUser != null)
+            if (this.BugUser != null && this.BugUser.IssueReportEntities != null)
             {
                 foreach (var issue in this.BugUser.IssueReportEntities)
                 {

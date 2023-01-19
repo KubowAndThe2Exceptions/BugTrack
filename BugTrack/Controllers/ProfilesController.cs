@@ -67,6 +67,28 @@ namespace BugTrack.Controllers
             return View(convertedProfile);
         }
 
+        // GET: Profiles/Details/5
+        public async Task<IActionResult> Details(string? id)
+        {
+            if (id == null || _context.Profiles == null)
+            {
+                return NotFound();
+            }
+
+            var profile = await _context.Profiles
+                .Include(p => p.BugUser).ThenInclude(p => p.IssueReportEntities)
+                .FirstOrDefaultAsync(m => m.BugUserId == id);
+
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            var convertedProfile = profile.ConvertToProfileVM();
+
+            return View(convertedProfile);
+        }
+
         // GET: Profiles/Create
         public IActionResult Create()
         {
