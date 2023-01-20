@@ -16,6 +16,8 @@ namespace BugTrack.ViewModels.VMIssueReportEntities
             issueReportEntity.ReplicationDescription = this.ReplicationDescription;
             issueReportEntity.DateFound = this.DateFound;
             issueReportEntity.BugUser = user;
+            issueReportEntity.Status = issueReportEntity.Status;
+            issueReportEntity.ModuleOrClass = issueReportEntity.ModuleOrClass;
             issueReportEntity.Id = this.Id;
 
             return issueReportEntity;

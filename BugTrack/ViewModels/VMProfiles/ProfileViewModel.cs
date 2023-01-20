@@ -8,7 +8,7 @@ namespace BugTrack.ViewModels.VMProfiles
     {
         public int Id { get; set; }
         public string OwnerName { get; set; }
-        
+
         [EmailAddress]
         public string Email { get; set; }
 
