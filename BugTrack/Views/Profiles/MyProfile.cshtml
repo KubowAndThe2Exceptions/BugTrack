@@ -1,4 +1,4 @@
-﻿@model BugTrack.ViewModels.VMProfiles.ProfileViewModel;
+﻿@model BugTrack.ViewModels.VMProfiles.ProfileWithIFormFileViewModel;
 
 @{
     ViewData["Title"] = "Details";
@@ -10,7 +10,21 @@
 <div>
     <h4>Profile</h4>
     <hr />
+    <form asp-controller="Profiles" asp-action="MyProfile" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+    <dl>
+        <dt>
+            <label asp-for="AvatarFile"></label>
+        </dt>
+        <dd>
+            <input asp-for="AvatarFile" type="file" >
+        </dd>
+    </dl>
+    <input class="btn" type="submit" value="Upload">
+    </form>
+    <img class="avatar_img" src="data:image/png;base64,@Model.AvatarEncoded" />
     <dl class="row">
+        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.UserJobTitle)
         </dt>

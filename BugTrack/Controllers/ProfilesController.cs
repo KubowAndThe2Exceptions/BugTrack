@@ -68,25 +68,60 @@ namespace BugTrack.Controllers
         }
 
         // GET: Profiles/Details/5
-        public async Task<IActionResult> MyProfile(string? id)
+        public async Task<IActionResult> MyProfile()
         {
-            if (id == null || _context.Profiles == null)
-            {
-                return NotFound();
-            }
-
+            var currentUser = await _userManager.GetUserAsync(User);
             var profile = await _context.Profiles
                 .Include(p => p.BugUser).ThenInclude(p => p.IssueReportEntities)
-                .FirstOrDefaultAsync(m => m.BugUserId == id);
+                .FirstOrDefaultAsync(m => m.BugUserId == currentUser.Id);
 
             if (profile == null)
             {
                 return NotFound();
             }
 
-            var convertedProfile = profile.ConvertToProfileVM();
+            var convertedProfile = profile.ConvertToProfileIFormFileVM();
 
             return View(convertedProfile);
+        }
+        [HttpPost]
+        public async Task<IActionResult> MyProfile(int? id, ProfileWithIFormFileViewModel profileVM)
+        {
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            var profile = _context.Profiles.Where(p => p.Id == profileVM.Id).FirstOrDefault();
+
+            if (profile.Id != id || profile.BugUserId != currentUser.Id)
+            {
+                return NotFound();
+            }
+
+            if (profileVM.AvatarFile == null)
+            {
+                ModelState.AddModelError("File", "File cannot be null");
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await profileVM.AvatarFile.CopyToAsync(memoryStream);
+
+                // Upload the file if less than 2 MB
+                if (memoryStream.Length < 2621440)
+                {
+                    profile.Avatar = memoryStream.ToArray();
+
+                    _context.Update(profile);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("MyProfile");
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large.");
+                }
+            }
+
+            return View(profileVM);
         }
 
         // GET: Profiles/Create

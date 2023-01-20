@@ -407,5 +407,40 @@ namespace BugTrack.Controllers.Tests
             var returnedResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Null(issueReport);
         }
+
+        [Fact]
+        public async Task MyIssues_ReturnsViewResult_WithUserIssues()
+        {
+            using var context = Fixture.CreateContext();
+            var bugUser = new BugUser { Id="TESTID-T1"};
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+            }));
+
+            var store = new Mock<IUserStore<BugUser>>();
+            var uManager = new Mock<UserManager<BugUser>>(store.Object, null, null, null, null, null, null, null, null);
+            uManager.Setup(m => m.GetUserAsync(user)).ReturnsAsync(bugUser);
+
+            var controllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = user
+                }
+            };
+
+            var controller = new IssueReportsController(context, uManager.Object);
+            controller.ControllerContext = controllerContext;
+
+            //Act
+            var result = await controller.MyIssues();
+
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<List<IssueReportEntityWithIdViewModel>>(viewResult.ViewData.Model);
+            Assert.NotNull(model);
+
+        }
     }
 }

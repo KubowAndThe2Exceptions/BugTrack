@@ -223,5 +223,22 @@ namespace BugTrack.Controllers
         {
           return _context.IssueReport.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> MyIssues()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var userDB = await _context.BugUser.Where(p => p.Id == currentUser.Id).FirstOrDefaultAsync();
+            _context.Entry(userDB).Collection(p => p.IssueReportEntities).Load();
+
+            var issueList = userDB.IssueReportEntities.ToList();
+            var convertedList = new List<IssueReportEntityWithIdViewModel>();
+            foreach (var issue in issueList)
+            {
+                var convertedIssue = issue.ConvertToIssueReportEntityWithIdVM();
+                convertedList.Add(convertedIssue);
+            }
+
+            return View(convertedList);
+        }
     }
 }

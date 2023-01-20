@@ -13,7 +13,9 @@ namespace BugTrack.ViewModels.VMProfiles
         public string Email { get; set; }
 
         public string UserJobTitle { get; set; }
-
+        
+        public string AvatarEncoded { get; set; }
+        
         public List<IssueReportEntityWithIdViewModel> IssueReportVMs = new List<IssueReportEntityWithIdViewModel>();
 
         public ProfileViewModel() { }
