@@ -21,5 +21,27 @@
             };
             return statuses;
         }
+        public static Status ProcessId(int id)
+        {
+            switch (id)
+            {
+                case 1:
+                    {
+                        return new Status(id, "Waiting");
+                    }
+                case 2:
+                    {
+                        return new Status(id, "Assigned");
+                    }
+                case 3:
+                    {
+                        return new Status(id, "Fixed");
+                    }
+                default:
+                    {
+                        return new Status(0, "Error");
+                    }
+            }
+        }
     }
 }

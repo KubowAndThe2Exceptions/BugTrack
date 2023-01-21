@@ -23,5 +23,35 @@
             };
             return statuses;
         }
+        public static ThreatLevel ProcessId(int id)
+        {
+            switch (id)
+            {
+                case 1:
+                    {
+                        return new ThreatLevel(id, "Small Detail");
+                    }
+                case 2:
+                    {
+                        return new ThreatLevel(id, "Minor");
+                    }
+                case 3:
+                    {
+                        return new ThreatLevel(id, "Okay");
+                    }
+                case 4:
+                    {
+                        return new ThreatLevel(id, "Major");
+                    }
+                case 5:
+                    {
+                        return new ThreatLevel(id, "Fix Immediately");
+                    }
+                default:
+                    {
+                        return new ThreatLevel(0, "Error");
+                    }
+            }
+        }
     }
 }

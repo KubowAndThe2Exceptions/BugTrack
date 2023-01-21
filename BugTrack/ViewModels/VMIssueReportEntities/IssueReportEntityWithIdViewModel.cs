@@ -1,5 +1,6 @@
 ﻿using BugTrack.Areas.Identity.Data;
 using BugTrack.Models;
+using BugTrack.ViewModels.VMIssueReportEntities.Helpers;
 
 namespace BugTrack.ViewModels.VMIssueReportEntities
 {
@@ -11,12 +12,12 @@ namespace BugTrack.ViewModels.VMIssueReportEntities
         {
             IssueReportEntity issueReportEntity = new IssueReportEntity();
             issueReportEntity.IssueTitle = this.IssueTitle;
-            issueReportEntity.ThreatLevel = this.ThreatLevel;
+            issueReportEntity.IssueThreatId = this.IssueThreat.Id;
             issueReportEntity.GeneralDescription = this.GeneralDescription;
             issueReportEntity.ReplicationDescription = this.ReplicationDescription;
             issueReportEntity.DateFound = this.DateFound;
             issueReportEntity.BugUser = user;
-            issueReportEntity.Status = issueReportEntity.Status;
+            issueReportEntity.IssueStatusId = issueReportEntity.IssueStatusId;
             issueReportEntity.ModuleOrClass = issueReportEntity.ModuleOrClass;
             issueReportEntity.Id = this.Id;
 

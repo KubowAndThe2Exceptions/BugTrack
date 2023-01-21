@@ -1,10 +1,12 @@
 ﻿using BugTrack.Areas.Identity.Data;
 using BugTrack.Models;
 using BugTrack.ViewModels.VMIssueReportEntities;
+using BugTrack.ViewModels.VMIssueReportEntities.Helpers;
 using BugTrackTests.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Moq;
 using System.Security.Claims;
 using Xunit;
@@ -193,8 +195,9 @@ namespace BugTrack.Controllers.Tests
             var controller = new IssueReportsController(context, uManager.Object);
             controller.ModelState.AddModelError("IssueTitle", "Required");
 
-            var issueReportVM = new IssueReportEntityViewModel { GeneralDescription = "foo", DateFound = DateTime.Now, ReplicationDescription = "bar",
-                IssueTitle = "Something", ThreatLevel = 1 };
+            var issueReportVM = new IssueReportEntityEditCreateVM { GeneralDescription = "foo", DateFound = DateTime.Now, ReplicationDescription = "bar",
+                IssueStatus = "1", IssueThreat = "1" 
+            };
             
             
             //Act
@@ -202,7 +205,7 @@ namespace BugTrack.Controllers.Tests
 
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IssueReportEntityViewModel>(viewResult.ViewData.Model);
+            var model = Assert.IsAssignableFrom<IssueReportEntityEditCreateVM>(viewResult.ViewData.Model);
 
         }
 
@@ -233,8 +236,10 @@ namespace BugTrack.Controllers.Tests
             var controller = new IssueReportsController(context, uManager.Object);
             controller.ControllerContext = controllerContext;
 
-            var issueReportVM = new IssueReportEntityViewModel { DateFound = DateTime.Now, GeneralDescription = "foo",
-                IssueTitle = "bar", ReplicationDescription = "foobar", ThreatLevel = 2};
+            var issueReportVM = new IssueReportEntityEditCreateVM { DateFound = DateTime.Now, GeneralDescription = "foo",
+                IssueTitle = "bar", ReplicationDescription = "foobar",
+                IssueStatus = "1", IssueThreat = "1"
+            };
 
             int priorCount = context.IssueReport.Count();
 
@@ -308,7 +313,7 @@ namespace BugTrack.Controllers.Tests
 
             using var context = Fixture.CreateContext();
             var controller = new IssueReportsController(context, uManager.Object);
-            var issueReportVM = new IssueReportEntityWithIdViewModel();
+            var issueReportVM = new IssueReportEntityEditCreateVM();
             issueReportVM.Id = 1;
 
             //Act
@@ -326,7 +331,7 @@ namespace BugTrack.Controllers.Tests
 
             using var context = Fixture.CreateContext();
             var controller = new IssueReportsController(context, uManager.Object);
-            var issueReportVM = new IssueReportEntityWithIdViewModel();
+            var issueReportVM = new IssueReportEntityEditCreateVM();
             issueReportVM.Id = 123441;
 
             //Act
@@ -344,8 +349,10 @@ namespace BugTrack.Controllers.Tests
             var controller = new IssueReportsController(context, uManager.Object);
             context.Database.BeginTransaction();
 
-            var issueReportVM = new IssueReportEntityWithIdViewModel { Id = 1, DateFound = DateTime.Now, GeneralDescription = "Foo",
-                ReplicationDescription = "bar", IssueTitle = "An issue", ThreatLevel = 1 };
+            var issueReportVM = new IssueReportEntityEditCreateVM { Id = 1, DateFound = DateTime.Now, GeneralDescription = "Foo",
+                ReplicationDescription = "bar", IssueTitle = "An issue",
+                IssueStatus = "1", IssueThreat = "1"
+            };
 
             //Act
             var result = await controller.Edit(1, issueReportVM);

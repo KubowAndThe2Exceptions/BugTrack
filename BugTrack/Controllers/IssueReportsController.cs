@@ -93,7 +93,8 @@ namespace BugTrack.Controllers
         // GET: IssueReports/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new IssueReportEntityEditCreateVM();
+            return View(model);
         }
 
         // POST: IssueReports/Create
@@ -101,7 +102,7 @@ namespace BugTrack.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ThreatLevel,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntityViewModel issueReportEntityViewModel)
+        public async Task<IActionResult> Create([Bind("IssueThreat,IssueStatus,ModuleOrClass,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntityEditCreateVM issueReportEntityViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -141,7 +142,7 @@ namespace BugTrack.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ThreatLevel,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntityWithIdViewModel issueReportEntityVM)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IssueThreat,IssueStatus,ModuleOrClass,GeneralDescription,ReplicationDescription,IssueTitle,DateFound")] IssueReportEntityEditCreateVM issueReportEntityVM)
         {
             if (id != issueReportEntityVM.Id)
             {

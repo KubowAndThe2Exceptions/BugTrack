@@ -52,21 +52,25 @@ namespace BugTrackTests.Data
                             {
                                 Id = 1,
                                 BugUserId = "TESTID-T1",
+                                ModuleOrClass = "foobar",
                                 DateFound = DateTime.Now,
                                 IssueTitle = "Test-Title 1",
                                 GeneralDescription = "Foo",
                                 ReplicationDescription = "Bar",
-                                ThreatLevel = 2
+                                IssueThreatId = 2,
+                                IssueStatusId = 1
                             });
                         context.Add(new IssueReportEntity
                         {
                             Id = 2,
                             BugUserId = "TESTID-T2",
+                            ModuleOrClass= "foo",
                             DateFound = DateTime.Now,
                             IssueTitle = "Test-Title 2",
                             GeneralDescription = "Fus",
                             ReplicationDescription = "Roh Dah",
-                            ThreatLevel = 4
+                            IssueThreatId = 4,
+                            IssueStatusId = 2
                         });
                         context.SaveChanges();
                         context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.IssueReport OFF");
