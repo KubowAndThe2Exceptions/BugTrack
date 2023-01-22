@@ -39,12 +39,17 @@ namespace BugTrack.Models
             issueReportEntityWithIdVM.IssueStatus = Status.ProcessId(this.IssueStatusId);
             issueReportEntityWithIdVM.ModuleOrClass = this.ModuleOrClass;
             issueReportEntityWithIdVM.BugUserId = this.BugUserId;
-            if (this.BugUser.Profile != null)
+
+            //TODO: Make BugUser and Profile params for the method
+            if (this.BugUser != null)
             {
-                issueReportEntityWithIdVM.Owner = this.BugUser.Profile.OwnerName;
-                if (this.BugUser.Profile.Avatar != null)
+                if (this.BugUser.Profile != null)
                 {
-                    issueReportEntityWithIdVM.AvatarEncoded = Convert.ToBase64String(this.BugUser.Profile.Avatar);
+                    issueReportEntityWithIdVM.Owner = this.BugUser.Profile.OwnerName;
+                    if (this.BugUser.Profile.Avatar != null)
+                    {
+                        issueReportEntityWithIdVM.AvatarEncoded = Convert.ToBase64String(this.BugUser.Profile.Avatar);
+                    }
                 }
             }
 
