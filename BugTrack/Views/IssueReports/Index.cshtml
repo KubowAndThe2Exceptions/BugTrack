@@ -1,67 +1,66 @@
-﻿@model IEnumerable<BugTrack.Models.IssueReportEntity>
+﻿@model IEnumerable<BugTrack.ViewModels.VMIssueReportEntities.IssueReportEntityWithIdViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
+<div class="container ms-3">
+    <h1>Index</h1>
 
-<h1>Index</h1>
+    <form asp-controller="IssueReports" asp-action="Index">
+        <p>
+            Issue Title: <input type="text" name="SearchString" />
+            <input type="submit" value="Search" />
+        </p>
 
-<form asp-controller="IssueReports" asp-action="Index">
+    </form>
+
     <p>
-        Issue Title: <input type="text" name="SearchString" />
-        <input type="submit" value="Search" />
+        <a asp-action="Create">Create New</a>
     </p>
-
-</form>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IssueTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IssueThreatId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GeneralDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReplicationDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateFound)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <th>
-                @Html.DisplayFor(modelItem => item.IssueTitle)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.IssueThreatId)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.GeneralDescription)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.ReplicationDescription)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.DateFound)
-            </th>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="d-flex flex-row flex-wrap">
+        @foreach (var item in Model) 
+        {
+            <div class="issuecard shadow" style="width: 25%;">
+                <div class="issuecard-top bg-success">
+                    <span>@Html.DisplayFor(modelItem => item.IssueTitle)</span>
+                </div>
+                <div class="issuecard-bottom bg-light border-start border-end border-bottom border-2">
+                    <div class="d-flex flex-row">
+                        <div class="d-flex flex-column">
+                            <div>
+                                <img class="issuecard-avatar" src="data:image/png;base64,@item.AvatarEncoded" />
+                            </div>
+                            <div>
+                                @Html.DisplayFor(modelItem => item.Owner)
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <div>
+                                @Html.DisplayFor(modelItem => item.ModuleOrClass)
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div>
+                                    @Html.DisplayFor(modelItem => item.IssueStatus.Description)
+                                </div>
+                                <div>
+                                    @Html.DisplayFor(modelItem=> item.IssueThreat.Description)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div>
+                            @Html.DisplayFor(modelItem => item.GeneralDescription)
+                        </div>
+                        <div>
+                            @Html.DisplayFor(modelItem => item.DateFound)
+                        </div>
+                        <div>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

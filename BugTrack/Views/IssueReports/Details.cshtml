@@ -1,10 +1,20 @@
 ﻿@using BugTrack.ViewModels;
+@using Microsoft.AspNetCore.Identity
+@using BugTrack.Areas.Identity.Data
 @model BugTrack.ViewModels.VMIssueReportEntities.IssueReportEntityWithIdViewModel;
+
+@inject UserManager<BugUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
 
 @{
     ViewData["Title"] = "Details";
 }
-
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 <h1>Details</h1>
 
 <div>
@@ -63,7 +73,11 @@
     </div>
         <br />
 }
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@if (Model.BugUserId == user.Id)
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+    </div>
+}

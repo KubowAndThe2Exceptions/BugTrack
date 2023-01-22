@@ -30,7 +30,7 @@ namespace BugTrack.Controllers
         public async Task<IActionResult> Index(string searchString)
         {
             //Should contain issue report view models instead of issuereport itself
-            var issues = from i in _context.IssueReport
+            var issues = from i in _context.IssueReport.Include(p => p.BugUser).ThenInclude(p => p.Profile)
                          select i;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -39,8 +39,15 @@ namespace BugTrack.Controllers
                          where i.IssueTitle.Contains(searchString)
                          select i;
             }
+            var issueList = issues.ToList();
+            var issueVMlist = new List<IssueReportEntityWithIdViewModel>();
+            foreach (var issue in issueList)
+            {
+                var convertedIssue = issue.ConvertToIssueReportEntityWithIdVM();
+                issueVMlist.Add(convertedIssue);
+            }
 
-            return View(await issues.ToListAsync());
+            return View(issueVMlist);
         }
 
         // GET: IssueReports/Details/5
@@ -59,6 +66,7 @@ namespace BugTrack.Controllers
                 return NotFound();
             }
             await _context.Entry(issueReportEntity).Collection(p => p.Comments).LoadAsync();
+            await _context.Entry(issueReportEntity).Reference(p => p.BugUser).LoadAsync();
 
             var issueReportVM = issueReportEntity.ConvertToIssueReportEntityWithIdVM();
 

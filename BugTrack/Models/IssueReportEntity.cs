@@ -38,6 +38,15 @@ namespace BugTrack.Models
             issueReportEntityWithIdVM.Id = this.Id;
             issueReportEntityWithIdVM.IssueStatus = Status.ProcessId(this.IssueStatusId);
             issueReportEntityWithIdVM.ModuleOrClass = this.ModuleOrClass;
+            issueReportEntityWithIdVM.BugUserId = this.BugUserId;
+            if (this.BugUser.Profile != null)
+            {
+                issueReportEntityWithIdVM.Owner = this.BugUser.Profile.OwnerName;
+                if (this.BugUser.Profile.Avatar != null)
+                {
+                    issueReportEntityWithIdVM.AvatarEncoded = Convert.ToBase64String(this.BugUser.Profile.Avatar);
+                }
+            }
 
             if (Comments != null)
             {
