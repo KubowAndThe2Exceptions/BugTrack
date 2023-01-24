@@ -24,41 +24,38 @@
                 <div class="issuecard-top bg-success">
                     <span>@Html.DisplayFor(modelItem => item.IssueTitle)</span>
                 </div>
-                <div class="issuecard-bottom bg-light border-start border-end border-bottom border-2">
-                    <div class="d-flex flex-row">
-                        <div class="d-flex flex-column">
+                <div class="issuecard-bottom bg-light border-start border-end border-bottom border-2 p-2">
+                    <div class="align-top align-text-top">
+                        <div class="d-inline-flex flex-column">
                             <div>
-                                <img class="issuecard-avatar" src="data:image/png;base64,@item.AvatarEncoded" />
+                                <img class="issuecard-avatar m-1 border border-3" src="data:image/png;base64,@item.AvatarEncoded" />
                             </div>
-                            <div>
+                            <div class="m-1 text-center h6">
                                 @Html.DisplayFor(modelItem => item.Owner)
                             </div>
                         </div>
-                        <div class="d-flex flex-column">
-                            <div>
-                                @Html.DisplayFor(modelItem => item.ModuleOrClass)
+                        <div class="d-inline-flex flex-column">
+                            <div class="bg-secondary text-center m-1 rounded-2 border-2 w-100">
+                                <span class="p-1">@Html.DisplayFor(modelItem => item.ModuleOrClass)</span>
                             </div>
-                            <div class="d-flex flex-row">
-                                <div>
-                                    @Html.DisplayFor(modelItem => item.IssueStatus.Description)
+                            <div class="d-inline-flex flex-row">
+                                <div class="m-1 text-center">
+                                    <span class="badge bg-primary rounded-pill border border-2">@Html.DisplayFor(modelItem => item.IssueStatus.Description)</span>
                                 </div>
-                                <div>
-                                    @Html.DisplayFor(modelItem=> item.IssueThreat.Description)
+                                <div class="m-1 text-center">
+                                    <span class="badge bg-primary rounded-pill border border-2">@Html.DisplayFor(modelItem=> item.IssueThreat.Description)</span>
                                 </div>
                             </div>
                         </div>
+                        <div class="float-end">@Html.DisplayFor(modelItem => item.GeneralDescription)</div>
                     </div>
-                    <div class="d-flex flex-column">
-                        <div>
-                            @Html.DisplayFor(modelItem => item.GeneralDescription)
-                        </div>
-                        <div>
-                            @Html.DisplayFor(modelItem => item.DateFound)
-                        </div>
-                        <div>
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        </div>
-                    </div>
+                @*<div>
+                    @Html.DisplayFor(modelItem => item.DateFound)
+                </div>
+                <div>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </div>
+                *@
                 </div>
             </div>
         }

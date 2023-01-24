@@ -52,7 +52,7 @@ namespace BugTrack.ViewModels.VMIssueReportEntities
             //Probably shouldnt have user on this class
             issueReportEntity.BugUser = user;
             issueReportEntity.IssueStatusId = Convert.ToInt32(IssueStatus);
-            issueReportEntity.ModuleOrClass = issueReportEntity.ModuleOrClass;
+            issueReportEntity.ModuleOrClass = ModuleOrClass;
 
             return issueReportEntity;
         }

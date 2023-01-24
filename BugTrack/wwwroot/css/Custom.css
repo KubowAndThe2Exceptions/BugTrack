@@ -17,8 +17,6 @@
 }
 
 .issuecard-bottom{
-    display: flex;
-    flex-direction: column;
     height: 80%;
     border-radius: 0% 0% 5% 5%;
 }

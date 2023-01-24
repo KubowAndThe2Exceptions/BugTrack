@@ -40,7 +40,7 @@ namespace BugTrack.Controllers.Tests
 
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<List<IssueReportEntity>>(
+            var model = Assert.IsAssignableFrom<List<IssueReportEntityWithIdViewModel>>(
             viewResult.ViewData.Model);
 
             Assert.Equal(context.IssueReport.Count(), model.Count());
@@ -61,7 +61,7 @@ namespace BugTrack.Controllers.Tests
 
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<List<IssueReportEntity>>(
+            var model = Assert.IsAssignableFrom<List<IssueReportEntityWithIdViewModel>>(
                 viewResult.ViewData.Model);
             Assert.Single(model);
 
