@@ -14,15 +14,23 @@
 .issuecard-top > span {
     color: whitesmoke;
     padding: 3px;
+    padding-bottom: 10px;
 }
 
 .issuecard-bottom{
+    display: flex;
+    flex-direction: column;
     height: 80%;
     border-radius: 0% 0% 5% 5%;
 }
 
 .issuecard-avatar{
-    height: 120px;
-    width: 120px;
+    height: 80px;
+    width: 80px;
     border-radius: 50%;
+}
+
+.issuecard-contentstrip{
+    max-width: 20%;
+    max-height: 20%
 }

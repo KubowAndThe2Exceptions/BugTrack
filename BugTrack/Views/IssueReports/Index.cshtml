@@ -4,58 +4,40 @@
     ViewData["Title"] = "Index";
 }
 <div class="container ms-3">
-    <h1>Index</h1>
-
     <form asp-controller="IssueReports" asp-action="Index">
-        <p>
-            Issue Title: <input type="text" name="SearchString" />
-            <input type="submit" value="Search" />
-        </p>
-
+        <div class="d-flex align-content-center">
+            <div class="d-inline-block">
+                <input class="btn btn-outline-secondary rounded rounded-pill" type="submit" value="Search" />
+            </div>
+            <div class="mb-3 ms-2 d-inline-block" style="max-width: 30%;">
+                <input type="text" class="form-control" name="SearchString" placeholder="Seach" />
+            </div>
+        </div>
     </form>
-
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+    <a href="IssueReports/Create" class="btn btn-success rounded rounded-pill border border-2 box-shadow">New Issue</a>
     <div class="d-flex flex-row flex-wrap">
         @foreach (var item in Model) 
         {
-            <div class="issuecard shadow" style="width: 25%;">
+            <div class="issuecard shadow border border-2" style="width: 25%; height: 250px;">
                 <div class="issuecard-top bg-success">
                     <span>@Html.DisplayFor(modelItem => item.IssueTitle)</span>
                 </div>
-                <div class="issuecard-bottom bg-light border-start border-end border-bottom border-2 p-2">
-                    <div class="align-top align-text-top">
-                        <div class="d-inline-flex flex-column">
-                            <div>
-                                <img class="issuecard-avatar m-1 border border-3" src="data:image/png;base64,@item.AvatarEncoded" />
-                            </div>
-                            <div class="m-1 text-center h6">
-                                @Html.DisplayFor(modelItem => item.Owner)
-                            </div>
+                <div class="issuecard-bottom bg-light p-1">
+                    <div class="d-flex flex-row">
+                        <div class="bg-light shadow-sm text-center m-1 rounded-2 border border-2">
+                            <span class="p-1 small">@Html.DisplayFor(modelItem => item.ModuleOrClass)</span>
+                        </div> 
+                        <div class="m-1 text-center">
+                            <span class="badge bg-primary rounded-pill border border-2 shadow-sm">@Html.DisplayFor(modelItem => item.IssueStatus.Description)</span>
                         </div>
-                        <div class="d-inline-flex flex-column">
-                            <div class="bg-secondary text-center m-1 rounded-2 border-2 w-100">
-                                <span class="p-1">@Html.DisplayFor(modelItem => item.ModuleOrClass)</span>
-                            </div>
-                            <div class="d-inline-flex flex-row">
-                                <div class="m-1 text-center">
-                                    <span class="badge bg-primary rounded-pill border border-2">@Html.DisplayFor(modelItem => item.IssueStatus.Description)</span>
-                                </div>
-                                <div class="m-1 text-center">
-                                    <span class="badge bg-primary rounded-pill border border-2">@Html.DisplayFor(modelItem=> item.IssueThreat.Description)</span>
-                                </div>
-                            </div>
+                        <div class="m-1 text-center">
+                            <span class="badge bg-primary rounded-pill border border-2 shadow-sm">@Html.DisplayFor(modelItem=> item.IssueThreat.Description)</span>
                         </div>
-                        <div class="float-end">@Html.DisplayFor(modelItem => item.GeneralDescription)</div>
                     </div>
-                @*<div>
-                    @Html.DisplayFor(modelItem => item.DateFound)
-                </div>
-                <div>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                </div>
-                *@
+                    <div class="m-1">@Html.DisplayFor(modelItem => item.GeneralDescription)</div>
+                    <div class="small text-end mt-auto">
+                        @Html.DisplayFor(modelItem => item.Owner) | @Html.DisplayFor(modelItem => item.DateFound)
+                    </div>
                 </div>
             </div>
         }
