@@ -19,9 +19,9 @@
         @foreach (var item in Model) 
         {
             <div class="issuecard shadow border border-2" style="width: 25%; height: 250px;">
-                <div class="issuecard-top bg-success">
+                <a asp-action="Details" asp-route-id="@item.Id"><div class="issuecard-top bg-success">
                     <span>@Html.DisplayFor(modelItem => item.IssueTitle)</span>
-                </div>
+                </div></a>
                 <div class="issuecard-bottom bg-light p-1">
                     <div class="d-flex flex-row">
                         <div class="bg-light shadow-sm text-center m-1 rounded-2 border border-2">
@@ -34,7 +34,7 @@
                             <span class="badge bg-primary rounded-pill border border-2 shadow-sm">@Html.DisplayFor(modelItem=> item.IssueThreat.Description)</span>
                         </div>
                     </div>
-                    <div class="m-1">@Html.DisplayFor(modelItem => item.GeneralDescription)</div>
+                    <div class="m-1 issuecard-description">@Html.DisplayFor(modelItem => item.GeneralDescription)</div>
                     <div class="small text-end mt-auto">
                         @Html.DisplayFor(modelItem => item.Owner) | @Html.DisplayFor(modelItem => item.DateFound)
                     </div>

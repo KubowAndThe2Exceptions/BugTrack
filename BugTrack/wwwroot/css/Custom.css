@@ -17,6 +17,16 @@
     padding-bottom: 10px;
 }
 
+.issuecard > a {
+    text-decoration: none;
+    z-index: 1;
+}
+
+.issuecard-description {
+    overflow: hidden;
+    flex: 1;
+}
+
 .issuecard-bottom{
     display: flex;
     flex-direction: column;

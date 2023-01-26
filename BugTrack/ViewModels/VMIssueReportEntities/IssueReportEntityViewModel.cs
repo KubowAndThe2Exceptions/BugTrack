@@ -3,6 +3,7 @@ using BugTrack.Models;
 using BugTrack.ViewModels.VMComments;
 using BugTrack.ViewModels.VMIssueReportEntities.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace BugTrack.ViewModels.VMIssueReportEntities
 {
@@ -12,6 +13,9 @@ namespace BugTrack.ViewModels.VMIssueReportEntities
         public string BugUserId { get; set; }
         public string GeneralDescription { get; set; }
         public string ReplicationDescription { get; set; }
+        
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DateFound { get; set; }
         public List<CommentViewModel> Comments { get; set; }
         public Status IssueStatus { get; set; }
